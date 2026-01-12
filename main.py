@@ -18,43 +18,44 @@ def extract_bcci_logo(image: Image.Image) -> Image.Image:
     return image
 
 
-# Connect to LG TV
-# tv = connect()
+if __name__ == "__main__":
+    # Connect to LG TV
+    # tv = connect()
 
-model = load_model()
-ref_img = Image.open("./imgs/bcci-logo.png")
-ref_emb = embed(ref_img, model)
+    model = load_model()
+    ref_img = Image.open("./imgs/bcci-logo.png")
+    ref_emb = embed(ref_img, model)
 
-while True:
-    # Take screenshot
-    with mss.mss() as sct:
-        screenshot = sct.grab(sct.monitors[1])  # Monitor 1 = primary screen
-        img = Image.frombytes("RGB", screenshot.size, screenshot.bgra, "raw", "BGRX")
+    while True:
+        # Take screenshot
+        with mss.mss() as sct:
+            screenshot = sct.grab(sct.monitors[1])  # Monitor 1 = primary screen
+            img = Image.frombytes("RGB", screenshot.size, screenshot.bgra, "raw", "BGRX")
 
-    # Extract BCCI logo (if needed)
-    logo_img = extract_bcci_logo(img)
+        # Extract BCCI logo (if needed)
+        logo_img = extract_bcci_logo(img)
 
-    # Display images
-    # print("Screenshot:")
-    # display(img)
-    # print("Extracted Logo:")
-    # display(logo_img)
+        # Display images
+        # print("Screenshot:")
+        # display(img)
+        # print("Extracted Logo:")
+        # display(logo_img)
 
-    # Check logo similarity
-    logo_emb = embed(logo_img, model)
-    similarity = compute_similarity(ref_emb, logo_emb)
+        # Check logo similarity
+        logo_emb = embed(logo_img, model)
+        similarity = compute_similarity(ref_emb, logo_emb)
 
-    # Increase font size for better visibility
-    print(f"Logo Similarity: {similarity:.4f}")
+        # Increase font size for better visibility
+        print(f"Logo Similarity: {similarity:.4f}")
 
-    if similarity < 0.7:
-        # tv.mute(True)
-        mute_laptop()
-        print(f"Mute: Yes")
-    else:
-        # tv.mute(False)
-        unmute_laptop()
-        print(f"Mute: No")
+        if similarity < 0.7:
+            # tv.mute(True)
+            mute_laptop()
+            print(f"Mute: Yes")
+        else:
+            # tv.mute(False)
+            unmute_laptop()
+            print(f"Mute: No")
 
-    sleep(1)  # Wait before taking another screenshot
+        sleep(1)  # Wait before taking another screenshot
 
