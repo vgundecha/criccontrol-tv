@@ -2,9 +2,7 @@ from time import sleep
 
 import mss
 from PIL import Image
-from IPython.display import display, clear_output
 
-from client import detect_cricket
 from connection import connect
 from mute import mute_laptop, unmute_laptop
 from embedding import load_model, embed, compute_similarity
@@ -20,8 +18,8 @@ def extract_bcci_logo(image: Image.Image) -> Image.Image:
     return image
 
 
-
-tv = connect()
+# Connect to LG TV
+# tv = connect()
 
 model = load_model()
 ref_img = Image.open("./imgs/bcci-logo.png")
@@ -50,16 +48,13 @@ while True:
     print(f"Logo Similarity: {similarity:.4f}")
 
     if similarity < 0.7:
-        tv.mute(True)
+        # tv.mute(True)
         mute_laptop()
         print(f"Mute: Yes")
     else:
-        tv.mute(False)
+        # tv.mute(False)
         unmute_laptop()
         print(f"Mute: No")
 
     sleep(1)  # Wait before taking another screenshot
-
-    # Clear display output
-    clear_output(wait=True)
 
