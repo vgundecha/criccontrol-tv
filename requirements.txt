@@ -1,1 +1,8 @@
 pywebostv
+pillow
+mss
+torch
+torchvision
+requests
+pywin32
+pygetwindow
