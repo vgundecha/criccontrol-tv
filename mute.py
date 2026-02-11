@@ -1,20 +1,22 @@
-import ctypes
+from ctypes import POINTER, cast
+from comtypes import CLSCTX_ALL
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
 
-muted = False
+device = AudioUtilities.GetSpeakers()
 
-# This sends a 'Virtual Key' command to Windows
-def toggle_mute():
-    # 0xAD is the virtual key code for Volume Mute
-    ctypes.windll.user32.keybd_event(0xAD, 0, 0, 0)
+interface = device._dev.Activate(
+    IAudioEndpointVolume._iid_,
+    CLSCTX_ALL,
+    None
+)
 
-def mute_laptop():
-    global muted
-    if not muted:
-        toggle_mute()
-        muted = True
+volume = cast(interface, POINTER(IAudioEndpointVolume))
 
-def unmute_laptop():
-    global muted
-    if muted:
-        toggle_mute()
-        muted = False
+def mute_laptop(mute: bool):
+    """
+    Mute or unmute the laptop's audio.
+    """
+    if mute:
+        volume.SetMute(1, None)  # Mute
+    else:
+        volume.SetMute(0, None)  # Unmute
